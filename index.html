@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Med Spa vs. Salon vs. Spa: Live Training</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --char:#232426; --char-m:#444444; --char-l:#B4B4B4;
+    --ocean:#204855; --ocean-m:#216479; --ocean-l:#A6C1C9;
+    --terra:#A75F37; --terra-m:#E29D63; --terra-l:#F3D8C1;
+    --mauve:#4B3951; --mauve-m:#806C85; --mauve-l:#CCC4CE;
+    --sage:#9A997B; --sage-l:#D7D6CA; --rose:#BF9982; --rose-l:#D9C2B4;
+    --ivory:#F8F7F5; --white:#fff;
+    --ok:#3E7C59; --bad:#A33D3D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'Source Sans 3',Calibri,sans-serif;background:var(--ivory);color:var(--char);-webkit-font-smoothing:antialiased}
+  button{font-family:inherit;cursor:pointer;border:none}
+  .hidden{display:none!important}
+
+  /* ---------- Landing ---------- */
+  #landing{min-height:100%;background:var(--ocean);color:#fff;display:flex;align-items:center;justify-content:center;padding:32px;position:relative}
+  #landing:before{content:"";position:absolute;left:0;top:0;bottom:0;width:18px;background:var(--terra)}
+  .land-card{max-width:760px;width:100%}
+  .kicker{font-size:13px;letter-spacing:.12em;font-weight:700;color:var(--ocean-l);text-transform:uppercase}
+  .land-card h1{font-size:clamp(36px,6vw,64px);font-weight:700;line-height:1.05;margin:12px 0 10px}
+  .land-card p.sub{font-size:20px;color:var(--ocean-l);margin-bottom:36px}
+  .roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+  .role{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.25);border-radius:14px;padding:22px;color:#fff;text-align:left;transition:.15s}
+  .role:hover{background:rgba(255,255,255,.16);transform:translateY(-2px)}
+  .role b{display:block;font-size:22px;margin-bottom:6px}
+  .role span{color:var(--ocean-l);font-size:15px}
+  .role.host{border-color:var(--terra-m)}
+  .setup{margin-top:28px;background:rgba(0,0,0,.2);border-radius:12px;padding:16px}
+  .setup label{display:block;font-size:13px;color:var(--ocean-l);margin-bottom:6px;font-weight:600}
+  .setup input{width:100%;padding:12px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.95);font-size:14px;font-family:inherit;color:var(--char)}
+  .setup small{display:block;margin-top:8px;color:var(--ocean-l);font-size:13px}
+  .status-pill{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.12)}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--char-l)}
+  .dot.on{background:#7FD1A3}.dot.off{background:#E08B8B}
+
+  /* ---------- Host ---------- */
+  #host{min-height:100%;display:grid;grid-template-rows:auto 1fr auto}
+  .topbar{background:var(--ocean);color:#fff;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:6px solid var(--terra)}
+  .topbar .brand{font-family:'Comfortaa',sans-serif;font-size:18px;letter-spacing:.02em}
+  .topbar .brand span{font-family:'Source Sans 3';font-weight:400;color:var(--ocean-l);margin-left:12px;font-size:14px}
+  .scoreboard{display:flex;gap:12px;align-items:center}
+  .score{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border-radius:10px;padding:8px 14px;min-width:150px}
+  .score .av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:15px}
+  .score .nm{font-weight:700;font-size:15px;line-height:1}
+  .score .pt{font-size:20px;font-weight:700;margin-left:auto}
+  .score .st{font-size:11px;color:var(--ocean-l);display:block;margin-top:3px}
+  .score.leader{box-shadow:0 0 0 2px var(--terra-m) inset}
+  .stage{padding:28px 32px;display:grid;grid-template-columns:1.25fr .9fr;gap:28px;align-items:start;max-width:1500px;width:100%;margin:0 auto}
+  @media(max-width:1100px){.stage{grid-template-columns:1fr}}
+  .slide{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 14px rgba(35,36,38,.07)}
+  .slide-head{background:var(--ocean);color:#fff;padding:18px 26px}
+  .slide-head .kicker{color:var(--ocean-l)}
+  .slide-head h2{font-size:28px;font-weight:700;line-height:1.15;margin-top:4px}
+  .slide-body{padding:22px 26px}
+  .lead{font-size:17px;color:var(--char-m);margin-bottom:18px;line-height:1.45}
+  .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:700px){.cols{grid-template-columns:1fr}}
+  .card{border-radius:12px;border:1.5px solid;overflow:hidden;background:#fff}
+  .card h4{color:#fff;padding:9px 12px;font-size:13px;letter-spacing:.08em;text-align:center}
+  .card ul{list-style:none;padding:12px 14px}
+  .card li{font-size:14px;line-height:1.35;padding:4px 0 4px 18px;position:relative}
+  .card li:before{content:"•";position:absolute;left:2px;font-weight:700}
+  .card .big{font-size:26px;font-weight:700;padding:12px 14px 0}
+  .card .foot{margin:8px 12px 12px;padding:9px 10px;border-radius:8px;font-weight:700;font-size:13px;text-align:center}
+  .c-medspa{border-color:var(--ocean)} .c-medspa h4{background:var(--ocean)} .c-medspa li:before,.c-medspa .big{color:var(--ocean)} .c-medspa .foot{background:var(--ocean-l);color:var(--ocean)}
+  .c-salon{border-color:var(--mauve)} .c-salon h4{background:var(--mauve)} .c-salon li:before,.c-salon .big{color:var(--mauve)} .c-salon .foot{background:var(--mauve-l);color:var(--mauve)}
+  .c-spa{border-color:var(--terra)} .c-spa h4{background:var(--terra)} .c-spa li:before,.c-spa .big{color:var(--terra)} .c-spa .foot{background:var(--terra-l);color:var(--terra)}
+  table.cmp{width:100%;border-collapse:collapse;font-size:14px}
+  table.cmp th{color:#fff;padding:10px;font-size:12px;letter-spacing:.08em}
+  table.cmp th:first-child{background:var(--char-m)}
+  table.cmp th.medspa{background:var(--ocean)} table.cmp th.salon{background:var(--mauve)} table.cmp th.spa{background:var(--terra)}
+  table.cmp td{padding:10px;border-bottom:1px solid var(--sage-l);vertical-align:middle;line-height:1.3}
+  table.cmp td:first-child{font-weight:700;color:var(--ocean)}
+  table.cmp tr:nth-child(even) td{background:var(--ivory)}
+  .callout{margin-top:16px;background:var(--ocean-l);border-radius:12px;padding:14px 16px;font-size:15px;line-height:1.45}
+  .callout b{color:var(--ocean)}
+  .objs .obj{display:grid;grid-template-columns:.9fr 1.6fr;border:1.5px solid;border-radius:12px;overflow:hidden;margin-bottom:12px}
+  .objs .obj .q{padding:14px;font-weight:700;font-size:15px;display:flex;align-items:center}
+  .objs .obj .a{padding:12px 14px;font-size:14px;line-height:1.4}
+  .objs .obj .a b{display:block;margin-bottom:4px}
+  .objs .obj .a i{display:block;color:var(--char)}
+  .obj.salon{border-color:var(--mauve)} .obj.salon .q{background:var(--mauve-l);color:var(--mauve)} .obj.salon .a b{color:var(--mauve)}
+  .obj.spa{border-color:var(--terra)} .obj.spa .q{background:var(--terra-l);color:var(--terra)} .obj.spa .a b{color:var(--terra)}
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
+  .tile{background:#fff;border:1.5px solid;border-left-width:10px;border-radius:12px;padding:14px 16px}
+  .tile .n{font-size:34px;font-weight:700;line-height:1}
+  .tile .l{font-size:13px;color:var(--char-m);margin-top:6px}
+  .tile.medspa{border-color:var(--ocean)}.tile.medspa .n{color:var(--ocean)}
+  .tile.salon{border-color:var(--mauve)}.tile.salon .n{color:var(--mauve)}
+  .tile.spa{border-color:var(--terra)}.tile.spa .n{color:var(--terra)}
+  .takeaways{list-style:none}
+  .takeaways li{display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start;padding:10px 0;border-bottom:1px solid var(--sage-l)}
+  .takeaways .num{width:36px;height:36px;border-radius:50%;background:var(--terra);color:#fff;display:grid;place-items:center;font-weight:700}
+  .takeaways b{display:block;font-size:17px}
+  .takeaways span{color:var(--char-m);font-size:14px}
+
+  /* question panel */
+  .qpanel{background:#fff;border-radius:16px;box-shadow:0 2px 14px rgba(35,36,38,.07);overflow:hidden;position:sticky;top:20px}
+  .qpanel-head{padding:16px 22px;background:var(--char);color:#fff;display:flex;justify-content:space-between;align-items:center}
+  .qpanel-head .kicker{color:var(--terra-m)}
+  .phase{font-size:12px;font-weight:700;letter-spacing:.08em;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.12)}
+  .phase.open{background:var(--terra);animation:pulse 1.4s infinite}
+  .phase.revealed{background:var(--ok)}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+  .qbody{padding:20px 22px}
+  .qtext{font-size:20px;font-weight:700;line-height:1.3;margin-bottom:16px}
+  .opts{display:grid;gap:10px}
+  .opt{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:12px;border:2px solid var(--sage-l);border-radius:12px;padding:12px 14px;font-size:15px;text-align:left;background:#fff;position:relative}
+  .opt .ltr{width:34px;height:34px;border-radius:50%;background:var(--ivory);border:2px solid var(--sage-l);display:grid;place-items:center;font-weight:700;color:var(--ocean)}
+  .opt .who{display:flex;gap:6px}
+  .chip{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:12px}
+  .opt.correct{border-color:var(--ok);background:#EEF6F1}
+  .opt.correct .ltr{background:var(--ok);border-color:var(--ok);color:#fff}
+  .opt.wrong{border-color:#E7C9C9;background:#FBF1F1}
+  .explain{margin-top:16px;padding:14px;border-radius:12px;background:var(--ivory);border-left:6px solid var(--ok);font-size:15px;line-height:1.45}
+  .explain b{color:var(--ok)}
+  .waiting{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  .wchip{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--ivory);font-size:14px;font-weight:600;border:1px solid var(--sage-l)}
+  .wchip .dot{width:10px;height:10px}
+  .ctrl{display:flex;gap:10px;padding:16px 22px;border-top:1px solid var(--sage-l);background:var(--ivory);flex-wrap:wrap}
+  .btn{padding:12px 18px;border-radius:10px;font-weight:700;font-size:15px;transition:.15s}
+  .btn.primary{background:var(--terra);color:#fff}.btn.primary:hover{background:#8f5030}
+  .btn.ocean{background:var(--ocean);color:#fff}.btn.ocean:hover{background:var(--ocean-m)}
+  .btn.ghost{background:transparent;border:2px solid var(--ocean);color:var(--ocean)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .bottombar{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;background:#fff;border-top:1px solid var(--sage-l);font-size:14px;color:var(--char-m)}
+  .nav{display:flex;gap:8px;align-items:center}
+  .progress{display:flex;gap:4px}
+  .progress i{width:14px;height:6px;border-radius:3px;background:var(--sage-l);display:block}
+  .progress i.done{background:var(--ocean)} .progress i.cur{background:var(--terra)}
+  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--char);color:#fff;padding:12px 18px;border-radius:10px;font-size:14px;opacity:0;transition:.2s;pointer-events:none}
+  .toast.show{opacity:1}
+  .conn{font-size:12px;display:flex;align-items:center;gap:6px}
+
+  /* reveal splash */
+  .splash{margin-top:16px;display:grid;gap:8px}
+  .result{display:grid;grid-template-columns:36px 1fr auto;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;background:var(--ivory);font-size:15px}
+  .result .pts{font-weight:700}
+  .result.ok .pts{color:var(--ok)} .result.bad .pts{color:var(--bad)}
+
+  /* ---------- Player ---------- */
+  #player{min-height:100%;display:flex;flex-direction:column;max-width:560px;margin:0 auto;background:var(--ivory)}
+  .pbar{background:var(--ocean);color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:5px solid var(--terra)}
+  .pbar .me{display:flex;align-items:center;gap:10px;font-weight:700}
+  .pbar .mypts{font-size:22px;font-weight:700}
+  .pbar .mypts small{font-size:12px;font-weight:400;color:var(--ocean-l);display:block;text-align:right}
+  .pmain{padding:20px;flex:1}
+  .pwait{text-align:center;padding:60px 10px;color:var(--char-m)}
+  .pwait .ring{width:70px;height:70px;border-radius:50%;border:5px solid var(--sage-l);border-top-color:var(--terra);margin:0 auto 20px;animation:spin 1.2s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .pq{font-size:20px;font-weight:700;line-height:1.3;margin:6px 0 18px}
+  .popt{width:100%;display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:center;text-align:left;background:#fff;border:2px solid var(--sage-l);border-radius:14px;padding:16px 14px;font-size:16px;margin-bottom:10px;color:var(--char)}
+  .popt .ltr{width:36px;height:36px;border-radius:50%;background:var(--ivory);border:2px solid var(--sage-l);display:grid;place-items:center;font-weight:700;color:var(--ocean)}
+  .popt.sel{border-color:var(--ocean);background:#EEF3F5}
+  .popt.sel .ltr{background:var(--ocean);border-color:var(--ocean);color:#fff}
+  .popt.correct{border-color:var(--ok);background:#EEF6F1}.popt.correct .ltr{background:var(--ok);border-color:var(--ok);color:#fff}
+  .popt.wrong{border-color:var(--bad);background:#FBF1F1}.popt.wrong .ltr{background:var(--bad);border-color:var(--bad);color:#fff}
+  .popt:disabled{opacity:.9}
+  .lockin{width:100%;padding:18px;border-radius:14px;font-size:18px;font-weight:700;background:var(--terra);color:#fff;margin-top:8px}
+  .lockin:disabled{background:var(--char-l)}
+  .locked{margin-top:14px;text-align:center;padding:18px;border-radius:14px;background:var(--ocean);color:#fff;font-weight:700;font-size:17px}
+  .locked small{display:block;font-weight:400;color:var(--ocean-l);margin-top:4px}
+  .verdict{margin-top:14px;padding:18px;border-radius:14px;color:#fff;text-align:center}
+  .verdict.ok{background:var(--ok)}.verdict.bad{background:var(--bad)}
+  .verdict b{font-size:24px;display:block}
+  .verdict span{font-size:15px;opacity:.9}
+  .pexplain{margin-top:12px;background:#fff;border-radius:12px;padding:14px;font-size:15px;line-height:1.45;border-left:6px solid var(--ocean)}
+  .pick-name{display:grid;gap:12px;padding:30px 20px}
+  .pick-name h2{font-size:26px;margin-bottom:6px}
+  .pick-name p{color:var(--char-m);margin-bottom:10px}
+  .namebtn{padding:20px;border-radius:14px;font-size:22px;font-weight:700;color:#fff}
+  .pick-name input{padding:16px;border-radius:12px;border:2px solid var(--sage-l);font-size:18px;font-family:inherit}
+</style>
+</head>
+<body>
+
+<!-- ================= LANDING ================= -->
+<section id="landing">
+  <div class="land-card">
+    <div class="kicker">Meevo Sales Enablement &nbsp;|&nbsp; Live Training Game</div>
+    <h1>Med Spa vs. Salon vs. Spa</h1>
+    <p class="sub">Live training. Two reps, fourteen questions, one scoreboard.</p>
+    <div class="roles">
+      <button class="role host" onclick="startHost()"><b>I'm the host</b><span>Terry's screen. Teaching content, ask the room, reveal, scoreboard.</span></button>
+      <button class="role" onclick="startPlayer()"><b>I'm playing</b><span>Sky or Brandon. Open up your web browser and lock in answers live.</span></button>
+    </div>
+    <div class="setup">
+      <label for="apiUrl">Apps Script web app URL (ends in /exec)</label>
+      <input id="apiUrl" placeholder="https://script.google.com/macros/s/.../exec">
+      <small><span class="status-pill"><i class="dot" id="connDot"></i><span id="connText">Not connected</span></span> &nbsp; Saved in this browser. Players need the same URL, or share this page with <code>?api=</code> in the link.</small>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOST ================= -->
+<section id="host" class="hidden">
+  <div class="topbar">
+    <div class="brand">meevo <span>Med Spa vs. Salon vs. Spa: Live Training</span></div>
+    <div class="scoreboard" id="scoreboard"></div>
+  </div>
+  <div class="stage">
+    <div class="slide" id="slideEl"></div>
+    <div class="qpanel" id="qpanel"></div>
+  </div>
+  <div class="bottombar">
+    <div class="conn"><i class="dot" id="hostDot"></i><span id="hostConn">connecting…</span> &nbsp;·&nbsp; <span id="playersOnline"></span></div>
+    <div class="progress" id="progress"></div>
+    <div class="nav">
+      <button class="btn ghost" onclick="go(-1)">← Back</button>
+      <span id="counter" style="min-width:70px;text-align:center;font-weight:700"></span>
+      <button class="btn ocean" onclick="go(1)">Next →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PLAYER ================= -->
+<section id="player" class="hidden">
+  <div class="pbar">
+    <div class="me" id="meBar"></div>
+    <div class="mypts"><span id="myPts">0</span><small>points</small></div>
+  </div>
+  <div class="pmain" id="pmain"></div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   CONFIG
+   ===================================================================== */
+const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycby7LxmHvfxq2lSTzWt8LAJCbD49CA-lgeJwf9MiZASTGNZg9uiDYeWoXYrDOtflEphcYQ/exec'; // paste your /exec URL here to hard-code it
+const PLAYERS = [
+  { name: 'Sky',     color: '#4B3951' },
+  { name: 'Brandon', color: '#A75F37' },
+];
+const POLL_MS = 2000;
+
+/* =====================================================================
+   CONTENT: slides + questions (one question per slide)
+   ===================================================================== */
+const SEG = {
+  medspa:{label:'MED SPA', cls:'c-medspa'},
+  salon: {label:'SALON',   cls:'c-salon'},
+  spa:   {label:'SPA',     cls:'c-spa'},
+};
+function cardHTML(seg, items, opts={}){
+  return `<div class="card ${SEG[seg].cls}"><h4>${SEG[seg].label}</h4>
+    ${opts.big?`<div class="big">${opts.big}</div>`:''}
+    <ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul>
+    ${opts.foot?`<div class="foot">${opts.foot}</div>`:''}</div>`;
+}
+
+const SLIDES = [
+{
+  id:'q1', kicker:'Why this session exists', title:'Same product. Different buyer. Different conversation.',
+  body:`<p class="lead">You already know how to sell Meevo. What changes is who is across the table, how fast they decide, and what they need to hear in the first ten minutes.</p>
+  <div class="tiles">
+    <div class="tile medspa"><div class="n">4-8 wks</div><div class="l">Med Spa decision cycle</div></div>
+    <div class="tile salon"><div class="n">1-2 wks</div><div class="l">Salon decision cycle</div></div>
+    <div class="tile spa"><div class="n">2-3 wks</div><div class="l">Spa decision cycle</div></div>
+  </div>
+  <div class="callout"><b>The trap:</b> running a Med Spa discovery on a salon owner. Twenty minutes of workflow and compliance questions feels like an interrogation to someone who wants to know if you can fix no-shows by Friday.</div>`,
+  q:'A salon owner loved Tuesday\'s demo. Based on how salons buy, when should the proposal land?',
+  opts:['Wednesday morning','Early next week, after an internal review','In two weeks, once the SE has written a summary','Whenever the owner reaches back out'],
+  correct:0,
+  explain:'Salons decide in days, not weeks. The buyer brings the urgency; a Med Spa cadence of "circle back next week" lets the deal cool.'
+},
+{
+  id:'q2', kicker:'Orientation', title:'The three verticals at a glance',
+  body:`<table class="cmp">
+    <tr><th></th><th class="medspa">MED SPA</th><th class="salon">SALON</th><th class="spa">SPA</th></tr>
+    <tr><td>Core services</td><td>Injectables, lasers, skin</td><td>Hair, color, nails, barbering</td><td>Massage, facials, wellness</td></tr>
+    <tr><td>Who decides</td><td>Owner/MD + practice manager</td><td>Owner, often solo</td><td>Owner + spa director</td></tr>
+    <tr><td>Compliance</td><td>High: HIPAA, charting, consents</td><td>Low: consumer data, tips</td><td>Light: intake, preferences</td></tr>
+    <tr><td>Budget</td><td>Higher; justified by margins</td><td>Price-aware; fast payback</td><td>Mid; pays for guest experience</td></tr>
+    <tr><td>Money problem</td><td>Scattered patient data</td><td>No-shows and empty chairs</td><td>Guests who never come back</td></tr>
+    <tr><td>Buying pace</td><td>Deliberate, multi-stakeholder</td><td>Fast, gut-driven</td><td>Measured, relationship-driven</td></tr>
+  </table>`,
+  q:'Which vertical is most likely to have a single decision maker who is still working behind the chair?',
+  opts:['Med Spa','Salon','Spa','All three equally'],
+  correct:1,
+  explain:'Salon owners are usually owner-operators making a solo call between clients. That shapes everything: short attention, fast decisions, low tolerance for complexity.'
+},
+{
+  id:'q3', kicker:'Buyer profiles', title:'Who you are actually talking to',
+  body:`<div class="cols">
+    ${cardHTML('medspa',['<b>Owner / Medical Director.</b> Thinks in risk, reputation and margin.','Protecting patient data','Proving outcomes','Coordinating providers'],{foot:'"Is this going to create a compliance problem?"'})}
+    ${cardHTML('salon',['<b>Owner-Operator.</b> Still behind the chair. Short on time, allergic to complexity.','Filling the book','Getting stylists to rebook','Not losing a Saturday to software'],{foot:'"Will my team actually use this?"'})}
+    ${cardHTML('spa',['<b>Owner / Spa Director.</b> Hospitality mindset. Success = guests who return.','Guest retention','Memberships and series','Therapists capturing preferences'],{foot:'"Does this help the guest or just add screens?"'})}
+  </div>`,
+  q:'A spa director says, "I don\'t want anything that gets between my therapists and the guest." What is the unspoken question?',
+  opts:['Is this HIPAA compliant?','How much does it cost per room?','Does this make the guest experience better or just add screens?','Can I run payroll through it?'],
+  correct:2,
+  explain:'Spa buyers measure everything against guest experience. If your first five minutes don\'t address that, nothing else lands.'
+},
+{
+  id:'q4', kicker:'Pain points', title:'What each vertical is really complaining about',
+  body:`<div class="cols">
+    ${cardHTML('medspa',['Patient data scattered across charting, booking and POS','Compliance feels like constant exposure','Cannot see which treatments drive retention','Providers coordinate by text and sticky notes'],{foot:'Lead with: visibility and control'})}
+    ${cardHTML('salon',['No-shows and late cancels eat the week','Stylists forget to rebook at checkout','Front desk is the bottleneck','Reminders are manual, so they stop'],{foot:'Lead with: filled chairs and rebooking'})}
+    ${cardHTML('spa',['Guests come once and disappear','Preferences live in therapists\' heads','Memberships tracked in a spreadsheet','No view of who is about to churn'],{foot:'Lead with: guests who come back'})}
+  </div>`,
+  q:'You have one sentence to open with a salon owner. Which lands best?',
+  opts:['"We help practices centralize patient records and stay compliant."','"We help salons cut no-shows and get stylists rebooking at checkout."','"Meevo is an all-in-one platform with over 200 features."','"We help spas build memberships and keep guests coming back."'],
+  correct:1,
+  explain:'Salon pain is about the calendar. Option A is Med Spa language, option D is Spa language, and option C is about you, not them.'
+},
+{
+  id:'q5', kicker:'The language shift', title:'Change your vocabulary before you change your pitch',
+  body:`<p class="lead">Salon and spa owners hear "patient" and "treatment plan" and assume Meevo is medical software that is too much for them. Translate.</p>
+  <table class="cmp">
+    <tr><th class="medspa">MED SPA</th><th class="salon">SALON</th><th class="spa">SPA</th></tr>
+    <tr><td>Patient</td><td>Client</td><td>Guest</td></tr>
+    <tr><td>Provider / Practitioner</td><td>Stylist / Service provider</td><td>Therapist / Esthetician</td></tr>
+    <tr><td>Treatment</td><td>Service</td><td>Service / Experience</td></tr>
+    <tr><td>Chart / Intake</td><td>Client notes / Formula card</td><td>Guest profile / Preferences</td></tr>
+    <tr><td>Treatment plan</td><td>Rebook / Standing appointment</td><td>Series / Membership</td></tr>
+    <tr><td>Compliance</td><td>Simplicity</td><td>Hospitality</td></tr>
+  </table>`,
+  q:'Translate for a spa: "Providers can see the patient\'s chart before the treatment."',
+  opts:['"Stylists can see the client\'s formula card before the service."','"Therapists can see the guest\'s preferences before the service."','"Practitioners can see the client\'s intake before the appointment."','"Staff can see the patient\'s profile before the experience."'],
+  correct:1,
+  explain:'Spa: guest, therapist, preferences, service. Option A is correct salon language, not spa. Options C and D still carry clinical words.'
+},
+{
+  id:'q6', kicker:'Commercial lens', title:'Budget, ROI and the number that gets the deal moving',
+  body:`<div class="cols">
+    ${cardHTML('medspa',['One missed injectable appointment is $200-$400 out the door. Compliance exposure costs far more.'],{big:'$400-$800 / mo',foot:'Lead ROI with risk reduction and revenue per provider'})}
+    ${cardHTML('salon',['A 10-chair salon losing 6 no-shows a week at $75 each loses roughly $1,800 a month.'],{big:'$150-$300 / mo',foot:'Lead ROI with no-show recovery. Payback inside 30 days'})}
+    ${cardHTML('spa',['Moving retention from 30% to 40% on 400 guests is 40 more returning guests a month.'],{big:'$300-$600 / mo',foot:'Lead ROI with retention, memberships, add-ons'})}
+  </div>`,
+  q:'A salon owner says Meevo is too expensive. What do you ask next?',
+  opts:['"What budget did you have in mind?"','"Would a discount for annual billing help?"','"How many no-shows did you have last week, and what\'s your average ticket?"','"Can I send you a case study?"'],
+  correct:2,
+  explain:'Price is a proxy until they see the no-show math. Get their numbers and do the arithmetic with them live. Discounting before that just confirms it was overpriced.'
+},
+{
+  id:'q7', kicker:'Sales cycle', title:'Match the pace of the buyer',
+  body:`<div class="tiles">
+    <div class="tile medspa"><div class="n">4-8 wks</div><div class="l">Discovery 2-3 wks → Demo + SE 1-2 wks → Approval 1-2 wks</div></div>
+    <div class="tile salon"><div class="n">1-2 wks</div><div class="l">Discovery 2-3 days → Demo 3-5 days → Decision 2-3 days</div></div>
+    <div class="tile spa"><div class="n">2-3 wks</div><div class="l">Discovery 1 wk → Demo 3-5 days → Decision 1 wk</div></div>
+  </div>
+  <div class="callout"><b>What this means for you:</b> in Med Spa you often have to create urgency. In salons the buyer brings it, and your job is not to kill it with a slow process. Compress follow-up and set the next step before you hang up.</div>`,
+  q:'Which rep behavior most often kills a salon deal?',
+  opts:['Asking about no-shows on the first call','Bringing an SE to the demo','Following a Med Spa follow-up cadence after the demo','Showing the stylist mobile view'],
+  correct:2,
+  explain:'Slow follow-up is the number one adjustment for Med Spa reps. Everything else listed helps a salon deal.'
+},
+{
+  id:'q8', kicker:'Objection handling', title:'Salon objections you have not heard before',
+  body:`<div class="objs">
+    <div class="obj salon"><div class="q">"It's too expensive for a salon our size."</div><div class="a"><b>What they mean: price is the proxy; they haven't seen the no-show math.</b><i>Try: "How many no-shows last week? At your average ticket that's about $X a month. If Meevo recovers a third of that it pays for itself. Fair to look at that together?"</i></div></div>
+    <div class="obj salon"><div class="q">"My stylists won't use it."</div><div class="a"><b>What they mean: adoption fear from software the team ignored.</b><i>Try: "The stylists who like Meevo most see their rebook rate go up because checkout prompts it. Want to see what a stylist sees on their phone?"</i></div></div>
+    <div class="obj salon"><div class="q">"We don't have time to switch."</div><div class="a"><b>What they mean: fear of losing a busy Saturday.</b><i>Try: "Onboarding runs in parallel; your team keeps booking the whole time. What would need to be true for a switch to feel low-risk?"</i></div></div>
+  </div>`,
+  q:'"My stylists won\'t use it." Best response?',
+  opts:['"Our training team will make sure they do."','"Stylists who use Meevo see rebook rates go up because checkout prompts it. Want to see the stylist view?"','"That\'s fine, the front desk can do everything."','"Most of our salon customers had the same concern."'],
+  correct:1,
+  explain:'Reframe to what the stylist gains (more rebooks, more money) and offer to show the exact screen. Option D is empathy with no move; options A and C dodge the fear.'
+},
+{
+  id:'q9', kicker:'Objection handling', title:'Spa objections you have not heard before',
+  body:`<div class="objs">
+    <div class="obj spa"><div class="q">"We just moved to another system last year."</div><div class="a"><b>What they mean: switching fatigue.</b><i>Try: "I'm not here to make you switch for the sake of it. What did you hope that system would fix that it hasn't? If retention or memberships are on the list, it's worth twenty minutes."</i></div></div>
+    <div class="obj spa"><div class="q">"Our therapists are hands-on people, not screen people."</div><div class="a"><b>What they mean: software between therapist and guest.</b><i>Try: "Exactly why preferences live in the guest profile, not the therapist's head. Two lines before the service and the guest feels remembered."</i></div></div>
+    <div class="obj spa"><div class="q">"Our guests like to call us."</div><div class="a"><b>What they mean: hospitality pride.</b><i>Try: "Keep the phone. A guest who forgot to rebook gets a warm nudge from you. More rebooks means more of those calls, not fewer."</i></div></div>
+  </div>`,
+  q:'"Our guests like to call us, we don\'t want automated reminders." Which response protects the relationship AND moves the deal?',
+  opts:['"Automation is the industry standard now."','"You can turn reminders off entirely."','"Keep the phone. Meevo gives the guest who forgot to rebook a warm nudge from you, so you get more of those calls, not fewer. Want to see what the guest receives?"','"Your competitors are all automating."'],
+  correct:2,
+  explain:'Never argue against the personal touch in a spa; show how Meevo protects it. Then ask a question to keep control.'
+},
+{
+  id:'q10', kicker:'Discovery', title:'Discovery questions that sound native to each vertical',
+  body:`<div class="cols">
+    ${cardHTML('medspa',['Where does patient information live today, and who has to touch it?','How do you know which treatments bring patients back?','What does a compliance review look like right now?'],{foot:'Avoid: leading with price'})}
+    ${cardHTML('salon',['How many no-shows last week, and what\'s your average ticket?','At checkout, what makes a stylist remember to rebook?','Who is at the front desk when it gets busy, and what falls through?'],{foot:'Avoid: compliance or workflow questions early'})}
+    ${cardHTML('spa',['Of last month\'s guests, how many had been here before?','How do therapists know a returning guest\'s pressure, allergies or preferences?','How are memberships or series tracked today?'],{foot:'Avoid: anything that sounds clinical'})}
+  </div>`,
+  q:'A salon owner says, "We probably had 7 or 8 no-shows last week." What is the best next question?',
+  opts:['"How do you handle HIPAA today?"','"What does that cost you at your average ticket?"','"Great, let me tell you about our reminder features."','"How many stylists do you have?"'],
+  correct:1,
+  explain:'Follow the number with "what does that cost you?" That turns a complaint into a dollar figure you will use in the ROI and the close. Pitching here is too early.'
+},
+{
+  id:'q11', kicker:'Demo positioning', title:'Same demo, different first ten minutes',
+  body:`<div class="cols">
+    ${cardHTML('medspa',['Patient profile and charting in one view','Provider schedule and room coordination','Treatment retention reporting','Security and permissions'],{foot:'Show this first'})}
+    ${cardHTML('salon',['Online booking and no-show reduction flow','Checkout rebook prompt for stylists','Front desk view on a busy Saturday','Automated reminders and confirmations'],{foot:'Show this first'})}
+    ${cardHTML('spa',['Guest profile with preferences and history','Memberships and series tracking','Retention and churn-risk reporting','Add-on prompts at booking'],{foot:'Show this first'})}
+  </div>
+  <div class="callout"><b>Handing off to the SE:</b> give them the vertical, the money problem from discovery, and the one screen that has to land. "Salon, 10 chairs, losing about $1,800 a month to no-shows, open with the reminder and rebook flow."</div>`,
+  q:'Which SE handoff is strongest for a spa deal?',
+  opts:['"Spa, 12 rooms, standard demo please."','"Spa, 12 rooms, retention is around 30% and memberships live in Excel. Open with the guest profile and membership tracking."','"Spa, the director is nice, show them everything."','"Spa, 12 rooms, they asked about pricing so keep it short."'],
+  correct:1,
+  explain:'Vertical, the money problem with a number, and the one screen that must land. That is the handoff that lets the SE open strong.'
+},
+{
+  id:'q12', kicker:'Closing', title:'Closing plays by vertical',
+  body:`<div class="cols">
+    ${cardHTML('medspa',['Summarize risk reduced and revenue recovered per provider','Get owner and practice manager in the same decision meeting','Offer a short compliance or workflow review as the value-add next step','Set a decision date, not a "let\'s reconnect"'])}
+    ${cardHTML('salon',['Restate the no-show math in their numbers','Propose while the demo is still warm: same day or next morning','Offer a stylist walkthrough so the team says yes with the owner','Ask for the start date, not permission to follow up'])}
+    ${cardHTML('spa',['Lead with retention and membership upside','Bring a story from a similar spa, with a real number','Show the therapist view on mobile to remove the adoption fear','Close on the guest experience, then confirm the timeline'])}
+  </div>
+  <div class="callout"><b>The common thread:</b> every play ends with the rep asking for a date or a decision. Salon closes are the biggest adjustment; reps used to six-week cycles tend to under-ask.</div>`,
+  q:'Salon demo just ended and the owner said "I like it." What is the strongest close?',
+  opts:['"Great, I\'ll send a proposal next week and we can go from there."','"Based on your 7 no-shows a week, this pays for itself in month one. Can we get you started the first Monday of next month?"','"Would you like me to loop in your stylists for a second demo?"','"Let me check with my manager on pricing and get back to you."'],
+  correct:1,
+  explain:'Restate their number, then ask for the start date while the demo is warm. Options A and D add delay; option C is a useful step only if adoption is the stated blocker.'
+},
+{
+  id:'q13', kicker:'Role-play', title:'Practice: the first five minutes',
+  body:`<p class="lead">Pairs. One AE, one owner. Three rounds, four minutes each. Swap roles each round.</p>
+  <div class="cols">
+    ${cardHTML('salon',['<b>Salon owner, 8 chairs.</b>','Still cutting hair 4 days a week. Lost 7 no-shows last week.','Burned by a booking app the team ignored. Skeptical of "medical" software.'])}
+    ${cardHTML('spa',['<b>Spa director, 12 treatment rooms.</b>','Hospitality background, proud of the guest experience.','Memberships live in Excel. Worried about screens between therapist and guest.'])}
+    ${cardHTML('medspa',['<b>Med Spa owner, 3 providers.</b>','Control round.','Run your normal opener so the group hears the contrast with rounds one and two.'])}
+  </div>
+  <div class="callout"><b>Observer scores:</b> right vocabulary (client/guest, not patient)? Money problem reached inside two minutes? Next step with a date before the round ended?</div>`,
+  q:'In the salon round, the AE opens with "Tell me about your current workflow and how you handle client intake." What should the observer flag?',
+  opts:['Nothing, that is solid discovery','Too clinical and too slow: no money problem inside two minutes','The AE should have asked about HIPAA first','The AE should have pitched Meevo features first'],
+  correct:1,
+  explain:'"Workflow" and "intake" are Med Spa words, and the question delays the money problem. A salon opener should get to no-shows or empty chairs fast, in the owner\'s language.'
+},
+{
+  id:'q14', kicker:'Closing', title:'Five things to take back to your next call',
+  body:`<ul class="takeaways">
+    <li><span class="num">1</span><div><b>Translate first</b><span>Client and guest, not patient. Service, not treatment.</span></div></li>
+    <li><span class="num">2</span><div><b>Lead with their money problem</b><span>No-shows for salons. Retention for spas. Risk and revenue for Med Spa.</span></div></li>
+    <li><span class="num">3</span><div><b>Match their pace</b><span>Salons decide in days. Slow follow-up kills the deal.</span></div></li>
+    <li><span class="num">4</span><div><b>Sell the team, not just the owner</b><span>Show the stylist or therapist view early.</span></div></li>
+    <li><span class="num">5</span><div><b>Always leave with a date</b><span>A decision date or a start date, never "let's reconnect."</span></div></li>
+  </ul>`,
+  q:'Final question. How should every salon and spa call end?',
+  opts:['"I\'ll send over some information."','"Let\'s reconnect in a couple of weeks."','"Feel free to reach out with questions."','"Can we lock in Thursday for the decision?"'],
+  correct:3,
+  explain:'Always leave with a date. Reps used to 6-week Med Spa cycles tend to under-ask; salon and spa buyers expect you to ask.'
+}
+];
+
+/* =====================================================================
+   API
+   ===================================================================== */
+let API = '';
+function loadApi(){
+  const fromQuery = new URLSearchParams(location.search).get('api');
+  API = fromQuery || localStorage.getItem('mss_api') || DEFAULT_API_URL || '';
+  const inp = document.getElementById('apiUrl');
+  inp.value = API;
+  inp.addEventListener('change', ()=>{ API = inp.value.trim(); localStorage.setItem('mss_api', API); checkConn(); });
+  if (API) checkConn();
+}
+async function apiGet(params){
+  const u = new URL(API); Object.entries(params).forEach(([k,v])=>u.searchParams.set(k,v));
+  const r = await fetch(u.toString(), { method:'GET', redirect:'follow' });
+  return r.json();
+}
+async function apiPost(body){
+  const r = await fetch(API, { method:'POST', redirect:'follow', body: JSON.stringify(body) });
+  return r.json();
+}
+async function checkConn(){
+  const dot=document.getElementById('connDot'), txt=document.getElementById('connText');
+  if(!API){ dot.className='dot'; txt.textContent='Not connected'; return false; }
+  try{ const j=await apiGet({action:'ping'}); if(j.ok){ dot.className='dot on'; txt.textContent='Connected to Google Sheet'; return true; } }catch(e){}
+  dot.className='dot off'; txt.textContent='Could not reach the web app'; return false;
+}
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); }
+function playerColor(name){ const p=PLAYERS.find(x=>x.name===name); return p?p.color:'#9A997B'; }
+function initials(n){ return n.trim().slice(0,1).toUpperCase(); }
+
+/* =====================================================================
+   HOST
+   ===================================================================== */
+let idx = 0, state = { phase:'idle', currentQ:'', answers:[], scores:{}, players:[] }, hostTimer=null, demo=false;
+
+function startHost(){
+  if(!API){ demo = confirm('No Apps Script URL set. Run in demo mode (you click answers for Sky and Brandon yourself)?'); if(!demo) return; }
+  document.getElementById('landing').classList.add('hidden');
+  document.getElementById('host').classList.remove('hidden');
+  idx = Number(localStorage.getItem('mss_idx')||0);
+  renderHost();
+  if(!demo){ pollHost(); hostTimer=setInterval(pollHost, POLL_MS); }
+  else { state.players = PLAYERS.map(p=>p.name); renderHost(); }
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight') go(1); if(e.key==='ArrowLeft') go(-1);
+    if(e.key===' '){ e.preventDefault(); const s=SLIDES[idx]; if(state.currentQ!==s.id||state.phase==='idle') openQ(); else if(state.phase==='open') reveal(); }
+  });
+}
+function go(d){ idx=Math.max(0,Math.min(SLIDES.length-1,idx+d)); localStorage.setItem('mss_idx',idx); renderHost(); }
+
+async function pollHost(){
+  try{
+    const j = await apiGet({action:'state'});
+    state = j; document.getElementById('hostDot').className='dot on'; document.getElementById('hostConn').textContent='live';
+  }catch(e){ document.getElementById('hostDot').className='dot off'; document.getElementById('hostConn').textContent='reconnecting…'; }
+  renderHost();
+}
+async function openQ(){
+  const s=SLIDES[idx];
+  if(demo){ state={...state, currentQ:s.id, phase:'open', answers:[]}; renderHost(); return; }
+  await apiPost({action:'open', questionId:s.id}); toast('Question is live in their browsers'); pollHost();
+}
+async function reveal(){
+  if(demo){ state.phase='revealed'; scoreDemo(); renderHost(); return; }
+  await apiPost({action:'reveal'}); pollHost();
+}
+async function resetGame(){
+  if(!confirm('Start a fresh game? Scores reset to zero.')) return;
+  if(demo){ state={phase:'idle',currentQ:'',answers:[],scores:{},players:PLAYERS.map(p=>p.name)}; demoLog=[]; }
+  else await apiPost({action:'reset'});
+  idx=0; localStorage.setItem('mss_idx',0); renderHost(); if(!demo) pollHost();
+}
+/* demo mode scoring */
+let demoLog=[];
+function demoAnswer(player, choice){
+  if(state.phase!=='open') return;
+  if(state.answers.find(a=>a.player===player)) return;
+  state.answers.push({player, choice, questionId:state.currentQ, correct:null, points:0, responseMs:0});
+  renderHost();
+}
+function scoreDemo(){
+  const s=SLIDES[idx];
+  state.answers.forEach(a=>{ a.correct = a.choice===s.correct; a.points = a.correct?125:0; state.scores[a.player]=(state.scores[a.player]||0)+a.points; });
+}
+
+function renderHost(){
+  const s = SLIDES[idx];
+  // slide
+  document.getElementById('slideEl').innerHTML = `<div class="slide-head"><div class="kicker">${s.kicker}</div><h2>${s.title}</h2></div><div class="slide-body">${s.body}</div>`;
+  // scoreboard
+  const names = [...new Set([...PLAYERS.map(p=>p.name), ...Object.keys(state.scores||{})])];
+  const max = Math.max(0,...names.map(n=>state.scores?.[n]||0));
+  document.getElementById('scoreboard').innerHTML = names.map(n=>{
+    const pts=state.scores?.[n]||0; const online=(state.players||[]).includes(n);
+    return `<div class="score ${pts===max&&max>0?'leader':''}"><div class="av" style="background:${playerColor(n)}">${initials(n)}</div><div><div class="nm">${n}</div><span class="st">${online?'● online':'○ waiting'}</span></div><div class="pt">${pts}</div></div>`;
+  }).join('');
+  document.getElementById('playersOnline').textContent = `${(state.players||[]).length} player${(state.players||[]).length===1?'':'s'} online`;
+  // progress
+  document.getElementById('progress').innerHTML = SLIDES.map((x,i)=>`<i class="${i<idx?'done':i===idx?'cur':''}"></i>`).join('');
+  document.getElementById('counter').textContent = `${idx+1} / ${SLIDES.length}`;
+
+  // question panel
+  const isThis = state.currentQ===s.id;
+  const phase = isThis ? state.phase : 'idle';
+  const answers = isThis ? (state.answers||[]) : [];
+  const whoOn = i => answers.filter(a=>Number(a.choice)===i && (phase==='revealed'||demo)).map(a=>`<span class="chip" style="background:${playerColor(a.player)}" title="${a.player}">${initials(a.player)}</span>`).join('');
+  let optsHTML = s.opts.map((o,i)=>{
+    let cls='opt'; if(phase==='revealed'){ cls += i===s.correct?' correct':(answers.some(a=>Number(a.choice)===i)?' wrong':''); }
+    const click = demo && phase==='open' ? `onclick="demoPick(${i})"` : '';
+    return `<div class="${cls}" ${click}><span class="ltr">${'ABCD'[i]}</span><span>${o}</span><span class="who">${whoOn(i)}</span></div>`;
+  }).join('');
+  let waiting='';
+  if(phase==='open'){
+    waiting = `<div class="waiting">${PLAYERS.map(p=>{ const a=answers.find(x=>x.player===p.name); return `<span class="wchip"><i class="dot ${a?'on':''}"></i>${p.name} ${a?'locked in':'thinking…'}</span>`;}).join('')}</div>`;
+    if(demo) waiting += `<p style="font-size:13px;color:var(--char-m);margin-top:10px">Demo mode: click an option, then choose who answered.</p>`;
+  }
+  let splash='';
+  if(phase==='revealed'){
+    splash = `<div class="splash">${PLAYERS.map(p=>{ const a=answers.find(x=>x.player===p.name); if(!a) return `<div class="result"><span class="chip" style="background:${playerColor(p.name)}">${initials(p.name)}</span><span>${p.name} did not answer</span><span class="pts">+0</span></div>`;
+      return `<div class="result ${a.correct?'ok':'bad'}"><span class="chip" style="background:${playerColor(p.name)}">${initials(p.name)}</span><span>${p.name} picked ${'ABCD'[a.choice]} ${a.correct?'✓':'✗'}${a.responseMs?` · ${(a.responseMs/1000).toFixed(1)}s`:''}</span><span class="pts">+${a.points}</span></div>`;}).join('')}</div>
+      <div class="explain"><b>Why:</b> ${s.explain}</div>`;
+  }
+  const phaseLabel = {idle:'READY', open:'LIVE', revealed:'REVEALED'}[phase];
+  document.getElementById('qpanel').innerHTML = `
+    <div class="qpanel-head"><div class="kicker">Ask the room · Q${idx+1}</div><span class="phase ${phase}">${phaseLabel}</span></div>
+    <div class="qbody"><div class="qtext">${s.q}</div><div class="opts">${optsHTML}</div>${waiting}${splash}</div>
+    <div class="ctrl">
+      <button class="btn primary" onclick="openQ()" ${phase!=='idle'?'disabled':''}>Ask the room</button>
+      <button class="btn ocean" onclick="reveal()" ${phase!=='open'?'disabled':''}>Reveal answer</button>
+      <button class="btn ghost" onclick="go(1)" ${phase!=='revealed'?'disabled':''}>Next slide →</button>
+      <button class="btn ghost" style="margin-left:auto" onclick="resetGame()">Reset game</button>
+    </div>`;
+}
+function demoPick(i){
+  const who = prompt(`Who picked ${'ABCD'[i]}? (${PLAYERS.map(p=>p.name).join(' / ')})`);
+  const p = PLAYERS.find(x=>x.name.toLowerCase()===(who||'').trim().toLowerCase());
+  if(p) demoAnswer(p.name, i);
+}
+
+/* =====================================================================
+   PLAYER
+   ===================================================================== */
+let me = '', pState = {}, picked = null, lockedQ = null, pTimer=null, lastSeenQ='';
+function startPlayer(){
+  if(!API){ alert('Ask Terry for the game link (it includes the Apps Script URL).'); return; }
+  document.getElementById('landing').classList.add('hidden');
+  document.getElementById('player').classList.remove('hidden');
+  me = localStorage.getItem('mss_me')||'';
+  if(me) beginPlay(); else renderNamePick();
+}
+function renderNamePick(){
+  document.getElementById('meBar').innerHTML = `<span>Med Spa vs. Salon vs. Spa</span>`;
+  document.getElementById('pmain').innerHTML = `<div class="pick-name"><h2>Who are you?</h2><p>Tap your name to join Terry's game.</p>
+    ${PLAYERS.map(p=>`<button class="namebtn" style="background:${p.color}" onclick="setMe('${p.name}')">${p.name}</button>`).join('')}
+    <input id="otherName" placeholder="Someone else? Type your name"><button class="lockin" onclick="setMe(document.getElementById('otherName').value)">Join</button></div>`;
+}
+function setMe(n){ n=(n||'').trim(); if(!n) return; me=n; localStorage.setItem('mss_me',me); beginPlay(); }
+function beginPlay(){
+  document.getElementById('meBar').innerHTML = `<span class="chip" style="background:${playerColor(me)}">${initials(me)}</span> ${me} <button onclick="localStorage.removeItem('mss_me');location.reload()" style="background:none;color:var(--ocean-l);font-size:12px;margin-left:8px">switch</button>`;
+  pollPlayer(); pTimer=setInterval(pollPlayer, POLL_MS);
+}
+async function pollPlayer(){
+  try{ pState = await apiGet({action:'state', player:me}); }catch(e){ return; }
+  if(pState.currentQ!==lastSeenQ){ picked=null; lastSeenQ=pState.currentQ; lockedQ = (pState.answers||[]).find(a=>a.player===me)?pState.currentQ:null; }
+  else if((pState.answers||[]).find(a=>a.player===me)) lockedQ=pState.currentQ;
+  renderPlayer();
+}
+function renderPlayer(){
+  document.getElementById('myPts').textContent = pState.scores?.[me]||0;
+  const s = SLIDES.find(x=>x.id===pState.currentQ);
+  const main=document.getElementById('pmain');
+  if(!s || pState.phase==='idle'){
+    main.innerHTML = `<div class="pwait"><div class="ring"></div><h3>Waiting for Terry…</h3><p>The next question will appear here when it goes live.</p></div>`; return;
+  }
+  const myAns = (pState.answers||[]).find(a=>a.player===me);
+  const locked = !!myAns || lockedQ===s.id;
+  const revealed = pState.phase==='revealed';
+  const qn = SLIDES.indexOf(s)+1;
+  let html = `<div class="kicker" style="color:var(--terra)">Question ${qn} of ${SLIDES.length}</div><div class="pq">${s.q}</div>`;
+  html += s.opts.map((o,i)=>{
+    let cls='popt'; const mine = myAns?Number(myAns.choice)===i:picked===i;
+    if(revealed){ if(i===s.correct) cls+=' correct'; else if(mine) cls+=' wrong'; } else if(mine) cls+=' sel';
+    return `<button class="${cls}" ${locked||revealed?'disabled':''} onclick="picked=${i};renderPlayer()"><span class="ltr">${'ABCD'[i]}</span><span>${o}</span></button>`;
+  }).join('');
+  if(revealed){
+    const ok = myAns && myAns.correct;
+    html += `<div class="verdict ${ok?'ok':'bad'}"><b>${myAns?(ok?`Correct! +${myAns.points}`:'Not this time'):'No answer locked in'}</b><span>${ok?'Nice. Speed bonus included.':'Correct answer: '+'ABCD'[s.correct]}</span></div><div class="pexplain">${s.explain}</div>`;
+  } else if(locked){
+    html += `<div class="locked">Locked in: ${'ABCD'[myAns?myAns.choice:picked]}<small>Waiting for Terry to reveal…</small></div>`;
+  } else {
+    html += `<button class="lockin" ${picked===null?'disabled':''} onclick="lockIn()">Lock it in</button>`;
+  }
+  main.innerHTML = html;
+}
+async function lockIn(){
+  const s = SLIDES.find(x=>x.id===pState.currentQ); if(!s||picked===null) return;
+  lockedQ = s.id; renderPlayer();
+  try{
+    const r = await apiPost({action:'answer', player:me, questionId:s.id, choice:picked, correctIndex:s.correct});
+    if(r.ok===false && r.reason==='closed'){ lockedQ=null; toast('Too late, that question closed.'); }
+  }catch(e){ lockedQ=null; toast('Could not send. Try again.'); }
+  pollPlayer();
+}
+
+/* ===================================================================== */
+loadApi();
+const mode = new URLSearchParams(location.search).get('mode');
+if(mode==='host') startHost(); else if(mode==='play') startPlayer();
+</script>
+</body>
+</html>
